@@ -123,6 +123,10 @@ public class X5FileReaderView implements PlatformView, MethodChannel.MethodCallH
 
     @Override
     public void onCallBackAction(Integer integer, Object o, Object o1) {
-
+        Log.d("FileReader", "Code ${integer.toString()}");
+        if (integer == NOTIFY_CANDISPLAY)
+        {
+            methodChannel.invokeMethod("ready", true);
+        }
     }
 }

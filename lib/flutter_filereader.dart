@@ -8,6 +8,7 @@ import 'package:flutter_filereader/filereader.dart';
 class FileReaderView extends StatefulWidget {
   final String filePath; //local path
   final Function(bool) openSuccess;
+  final Function(bool) readyToDisplay; // Finished loading the engine and plugin
   final Widget loadingWidget;
   final Widget unSupportFileWidget;
 
@@ -15,6 +16,7 @@ class FileReaderView extends StatefulWidget {
       {Key key,
       this.filePath,
       this.openSuccess,
+      this.readyToDisplay,
       this.loadingWidget,
       this.unSupportFileWidget})
       : super(key: key);
@@ -124,6 +126,15 @@ class _FileReaderViewState extends State<FileReaderView> {
       }
       widget.openSuccess?.call(success);
     });
+
+    MethodChannel('wv.io/FileReader_' + id.toString()).setMethodCallHandler(
+      (call) {
+        if (call.method == "ready") {
+          widget.readyToDisplay?.call(call.arguments);
+        }
+        return;
+      },
+    );
   }
 
   Widget _createIosView() {
